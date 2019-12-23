@@ -20,15 +20,16 @@ pool.connect((err, db, done) => {
     return console.log(err);
   }
   else {
-    // var name = 'John';
-    // var surname = 'Doe';
-    // var id = Math.random().toFixed(3);
-    db.query('SELECT * from users', (err,table) => {
+    var name = 'Namwook';
+    var surname = 'Kim';
+    var id = Math.random().toFixed(3);
+    db.query('INSERT INTO users (name, surname, id) VALUES ($1,$2,$3)',[name, surname, id] , (err,table) => {
       if(err) {
         return console.log(err);
       }
       else {
-        console.log(table);
+        console.log('INSERTED DATA SUCCESS');
+        db.end();
       }
     })
   }
