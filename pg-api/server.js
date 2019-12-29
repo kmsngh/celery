@@ -113,4 +113,53 @@ app.get('/api/records/:id', function(request, response){
   })
 })
 
+app.post('/api/new-record', function(request, response){
+  var time = request.body.time
+  var kcal = request.body.kcal
+  var menu = request.body.menu
+  var id = request.body.id
+  var user_id = request.body.user_id
+  let newRecord = [id, time, kcal, menu, user_id]
+
+  // connect to postgres
+  pool.connect((err, db, done) => {
+    if(err) {
+      return response.status(400).send(err)
+    }
+    else {
+      db.query('INSERT INTO cal_record (id, time, kcal, menu, user_id) VALUES ($1,$2,$3,$4,$5)', newRecord, (err, table) => {
+        done()
+        if(err) {
+          return response.status(400).send(err)
+        }
+        else {
+          console.log("Data inserted")
+          response.status(201).send({message: 'Data inserted'})
+        }
+      })
+    }
+  })
+})
+
+app.delete('/api/remove-record/:id', function(request,response) {
+  var id = request.params.id
+  pool.connect(function(err, db, done) {
+    if(err) {
+      return response.status(400).send(err)
+    }
+    else{
+      db.query('delete from cal_record where id = $1', [id], function(err, result){
+        done()
+        if(err){
+          return response.status(400).send(err)
+        }
+        else{
+          return response.status(200).send({message:'delete record success'})
+        }
+      })
+    }
+  })
+})
+
+
 app.listen(PORT, () => console.log('Listening on port ' + PORT))
