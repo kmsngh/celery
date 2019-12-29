@@ -96,35 +96,20 @@ export default class landingPage extends Component {
             <button class="btn btn-outline-success my-2 my-sm-0" onClick={this.addUser.bind(this)}>Create</button>
           </form>
         </nav>
-        <ul class="list-group">
-          {users.map(user =>
-          <li key={user.id}>
-            <div class="card text-center">
+        <div class="d-flex justify-content-center">
+          <ul id="limit">
+            {users.map(user =>
+            <li class="list-group-item" key={user.id}>
               <div class="card-body">
                 <h5 class="card-title">{user.name} {user.surname}</h5>
               <Link onClick={() => {auth.login()}}to={{pathname: '/records', state:{id: user.id, name: user.name, surname: user.surname}}}>
                 <button class="btn btn-info">Log In</button>
               </Link>
-                <button class="btn btn-danger"  onClick={this.removeUser.bind(this, user.id)}>Remove</button>
+                <button class="btn btn-danger" onClick={this.removeUser.bind(this, user.id)}>Remove</button>
               </div>
-            </div>
-            
-            {/* {user.name} {user.surname}
-            <Link onClick={() => {auth.login()}}
-            to={{
-              pathname: '/records',
-              state: {
-                id: user.id
-              }
-            }}>
-              Login
-            
-            <button onClick={this.removeUser.bind(this, user.id)}>
-              Remove
-            </button> */}
-          </li>)}
-        </ul>
-        {/* <pre>{JSON.stringify(users)}</pre> */}
+            </li>)}
+          </ul>
+        </div>
       </div>
     )
   }

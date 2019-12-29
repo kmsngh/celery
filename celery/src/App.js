@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import LandingPage from './landingPage'
 import Records from './records'
 import { ProtectedRoute } from './protectedRoute'
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
 import {
   Route,

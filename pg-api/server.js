@@ -28,6 +28,7 @@ app.use(function(request, response, next) {
   next()
 })
 
+// Get user list from users
 app.get('/api/users', function(request, response){
   pool.connect(function(err, db, done){
     if(err){
@@ -47,6 +48,7 @@ app.get('/api/users', function(request, response){
   })
 })
 
+// Add new users
 app.post('/api/new-user', function(request, response){
   var name = request.body.name
   var surname = request.body.surname
@@ -73,6 +75,7 @@ app.post('/api/new-user', function(request, response){
   })
 })
 
+// Delete a user
 app.delete('/api/remove/:id', function(request,response) {
   var id = request.params.id
   pool.connect(function(err, db, done) {
@@ -93,6 +96,7 @@ app.delete('/api/remove/:id', function(request,response) {
   })
 })
 
+// Get records from certain user
 app.get('/api/records/:id', function(request, response){
   var id = request.params.id
   pool.connect(function(err, db, done){
@@ -113,6 +117,7 @@ app.get('/api/records/:id', function(request, response){
   })
 })
 
+// Add new record
 app.post('/api/new-record', function(request, response){
   var time = request.body.time
   var kcal = request.body.kcal
@@ -141,6 +146,7 @@ app.post('/api/new-record', function(request, response){
   })
 })
 
+// Delete a record
 app.delete('/api/remove-record/:id', function(request,response) {
   var id = request.params.id
   pool.connect(function(err, db, done) {
