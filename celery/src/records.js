@@ -18,15 +18,18 @@ export default class records extends Component {
   }
 
   componentDidMount(){
+    var d = new Date();
+    var month = d.getMonth() + 1;
+    var day = d.getDate();
+    console.log(day)
     let id = this.state.user_id
     console.log('RECORDS MOUNTED')
-    fetch('http://localhost:3000/api/records/'+id)
+    fetch('http://localhost:3000/api/records/'+id+'/'+month+'/'+day)
     .then(res => res.json())
     .then(
       (result) => {
-
         var total = 0
-        result.forEach(record => total += Number(record.kcal))
+        result.forEach(record => total += Number(record.calories))
         var currentTotal = this.state.currentTotal
 
         this.setState({
@@ -65,7 +68,7 @@ export default class records extends Component {
           let records = this.state.records
           records.push(record_data)
           let currentTotal = this.state.currentTotal
-          let newTotal = currentTotal + Number(record_data.kcal)
+          let newTotal = currentTotal + Number(record_data.calories)
           this.setState({
             records: records,
             prevTotal: currentTotal,
@@ -76,6 +79,21 @@ export default class records extends Component {
           console.log(error)
         }
       )
+  }
+
+  mealType(i) {
+    switch(i) {
+      case 1:
+        return 'Breakfast'
+      case 2:
+        return 'Lunch'
+      case 3:
+        return 'Dinner'
+      case 4:
+        return 'Snack'
+      default:
+        return 'ERROR'
+    }
   }
 
   removeRecord(id){
@@ -92,7 +110,7 @@ export default class records extends Component {
           let record = records.find(record => record.id === id)
           records.splice(records.indexOf(record),1)
           let currentTotal = this.state.currentTotal
-          let newTotal = currentTotal - Number(record.kcal)
+          let newTotal = currentTotal - Number(record.calories)
           this.setState({
             records: records,
             prevTotal: currentTotal,
@@ -198,7 +216,7 @@ export default class records extends Component {
         <table class="table">
           <thead>
             <tr>
-              <th scope="col">Time</th>
+              <th scope="col">Meal Type</th>
               <th scope="col">Calories (kcal)</th>
               <th scope="col">Menu</th>
               <th scope="col"></th>
@@ -207,8 +225,8 @@ export default class records extends Component {
           <tbody>
           {records.map(record =>
             <tr>
-              <td>{record.time}</td>
-              <td>{record.kcal}</td>
+              <td>{this.mealType(record.mealtype)}</td>
+              <td>{record.calories}</td>
               <td>{record.menu}</td>
               <td>
               <button type="button" class="close" aria-label="Close" onClick={this.removeRecord.bind(this, record.id)}>

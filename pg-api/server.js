@@ -97,14 +97,16 @@ app.delete('/api/remove/:id', function(request,response) {
 })
 
 // Get records from certain user
-app.get('/api/records/:id', function(request, response){
+app.get('/api/records/:id/:month/:day', function(request, response){
   var id = request.params.id
+  var month = request.params.month
+  var day = request.params.day
   pool.connect(function(err, db, done){
     if(err){
       return response.status(400).send(err)
     }
     else{
-      db.query('SELECT * FROM cal_record WHERE user_id = $1', [id], function(err, table){
+      db.query('SELECT * FROM records WHERE user_id = $1 and month = $2 and day = $3', [id, month, day], function(err, table){
         done()
         if(err){
           return response.status(400).send(err)
@@ -119,12 +121,14 @@ app.get('/api/records/:id', function(request, response){
 
 // Add new record
 app.post('/api/new-record', function(request, response){
-  var time = request.body.time
-  var kcal = request.body.kcal
-  var menu = request.body.menu
   var id = request.body.id
   var user_id = request.body.user_id
-  let newRecord = [id, time, kcal, menu, user_id]
+  var month = request.body.month
+  var day = request.body.day
+  var mealtype = request.body.mealtype
+  var calories = request.body.calories
+  var menu = request.body.menu
+  let newRecord = [id, user_id, month, day, mealtype, calories, menu]
 
   // connect to postgres
   pool.connect((err, db, done) => {
@@ -132,7 +136,7 @@ app.post('/api/new-record', function(request, response){
       return response.status(400).send(err)
     }
     else {
-      db.query('INSERT INTO cal_record (id, time, kcal, menu, user_id) VALUES ($1,$2,$3,$4,$5)', newRecord, (err, table) => {
+      db.query('INSERT INTO records (id, user_id, month, day, mealtype, calories, menu) VALUES ($1,$2,$3,$4,$5,$6,$7)', newRecord, (err, table) => {
         done()
         if(err) {
           return response.status(400).send(err)
@@ -154,7 +158,7 @@ app.delete('/api/remove-record/:id', function(request,response) {
       return response.status(400).send(err)
     }
     else{
-      db.query('delete from cal_record where id = $1', [id], function(err, result){
+      db.query('delete from records where id = $1', [id], function(err, result){
         done()
         if(err){
           return response.status(400).send(err)
