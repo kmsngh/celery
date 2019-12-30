@@ -96,7 +96,7 @@ export default class Calories extends Component {
             </div>
             <div class="modal-body">
               <form name='goalform'>
-                <input class="form-control mr-sm-2" type='text' ref='goal' placeholder={goal}/>
+                <input class="form-control mr-sm-2" id='currentGoal' type='text' ref='goal' placeholder={'Current limit: '+goal}/>
                 <div class='d-flex flex-row-reverse'>
                 <button type="button" class="btn btn-primary" data-dismiss="modal" onClick={this.changeMaxCal.bind(this)}>Save changes</button>
                 </div>
