@@ -32,7 +32,21 @@
   width: 800px;
 }
 
+#limit2 {
+  width: 600px;
+}
 
+.records {
+  height: 380px;   
+  overflow-y: auto;    /* Trigger vertical scroll    */
+  overflow-x: auto;  /* Hide the horizontal scroll */
+}
+
+.monthly-records {
+  height: 820px;   
+  overflow-y: auto;    /* Trigger vertical scroll    */
+  overflow-x: auto;  /* Hide the horizontal scroll */
+}
 
 @keyframes App-logo-spin {
   from {
