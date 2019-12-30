@@ -53,7 +53,7 @@ app.post('/api/new-user', function(request, response){
   var name = request.body.name
   var surname = request.body.surname
   var id = request.body.id
-  let newUser = [name, surname, id]
+  let newUser = [2000, name, surname, id]
 
   // connect to postgres
   pool.connect((err, db, done) => {
@@ -61,7 +61,7 @@ app.post('/api/new-user', function(request, response){
       return response.status(400).send(err)
     }
     else {
-      db.query('INSERT INTO users (name, surname, id) VALUES ($1,$2,$3)', newUser, (err, table) => {
+      db.query('INSERT INTO users (maxcal, name, surname, id) VALUES ($1,$2,$3,$4)', newUser, (err, table) => {
         done()
         if(err) {
           return response.status(400).send(err)
@@ -112,6 +112,7 @@ app.get('/api/records/:id/:month/:day', function(request, response){
           return response.status(400).send(err)
         }
         else{
+          console.log(table.rows)
           return response.status(200).send(table.rows)
         }
       })
@@ -171,5 +172,70 @@ app.delete('/api/remove-record/:id', function(request,response) {
   })
 })
 
+// Get records of certain month from certain user
+app.get('/api/monthly-records/:id/:month', function(request, response){
+  var id = request.params.id
+  var month = request.params.month
+  pool.connect(function(err, db, done){
+    if(err){
+      return response.status(400).send(err)
+    }
+    else{
+      db.query('SELECT * FROM records WHERE user_id = $1 and month = $2', [id, month], function(err, table){
+        done()
+        if(err){
+          return response.status(400).send(err)
+        }
+        else{
+          console.log(table.rows)
+          return response.status(200).send(table.rows)
+        }
+      })
+    }
+  })
+})
+
+// Get goal from certain user
+app.get('/api/goals/:id', function(request, response){
+  var id = request.params.id
+  pool.connect(function(err, db, done){
+    if(err){
+      return response.status(400).send(err)
+    }
+    else{
+      db.query('SELECT maxcal FROM users where id = $1', [id], function(err,table){
+        done()
+        if(err){
+          return response.status(400).send(err)
+        }
+        else{
+          return response.status(200).send(table.rows)
+        }
+      })
+    }
+  })
+})
+
+// Get goal from certain user
+app.all('/api/change-goals/:id/:goal', function(request, response){
+  var id = request.params.id
+  var newGoal = request.params.goal
+  pool.connect(function(err, db, done){
+    if(err){
+      return response.status(400).send(err)
+    }
+    else{
+      db.query('UPDATE users set maxcal = $1 where id = $2', [newGoal, id], function(err,maxcal){
+        done()
+        if(err){
+          return response.status(400).send(err)
+        }
+        else{
+          return response.status(200).send(maxcal)
+        }
+      })
+    }
+  })
+})
 
 app.listen(PORT, () => console.log('Listening on port ' + PORT))
