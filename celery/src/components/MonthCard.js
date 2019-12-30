@@ -78,10 +78,10 @@ export default class MonthCard extends Component {
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">{this.convertMonth(this.props.month)}</h5>
-        <div class="d-flex flex-row justify-content-center">
-        <h6 class="card-subtitle mb-2 text-muted" id={this.props.month}> </h6>
+        <div class="d-flex flex-row justify-content-center align-items-end">
+        <h2 class="mb-2 display-4" id={this.props.month}> </h2>
+        <p class="blockquote"> kcal</p>
             {this.countUpCal()}
-        <p class="card-subtitle mb-2 text-muted"> kcal</p>
         </div>
         <p href="#" class="card-link"> </p>
       </div>
